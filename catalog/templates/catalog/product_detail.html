@@ -1,0 +1,22 @@
+{% extends 'catalog/base.html' %}
+{% block content  %}
+{% load my_tags %}
+<div class="row text-center">
+    <div class="col-6">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ product.name }}</h4>
+            </div>
+            <div class="col-md-6">
+                <img src="{% mediapath product.image %}" width="300" height="300" alt="изображение" >
+            </div>
+            <div class="card-body">
+                <h2><p>{{ product.name }}</p></h2>
+                <p> Описание: <b>{{ product.description }} </b></p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
