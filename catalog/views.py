@@ -4,25 +4,33 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import ContactForm
-from catalog.models import Product
+from catalog.forms import CombinedProductVersionForm, ContactForm
+from catalog.models import Product, Version
 
 
 # Create your views here.
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ('name', 'description', 'image', 'category', 'price',)
+    form_class = CombinedProductVersionForm
     success_url = reverse_lazy('catalog:product_list')
 
 
 class ProductListView(ListView):
     model = Product
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for product in context['object_list']:
+            product_versions = Version.objects.filter(product=product)
+            current_version = product_versions.filter(is_current_version=True).first()
+            product.current_version = current_version
+        return context
+
 
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ('name', 'description', 'image', 'category', 'price',)
+    form_class = CombinedProductVersionForm
     success_url = reverse_lazy('catalog:product_list')
 
 

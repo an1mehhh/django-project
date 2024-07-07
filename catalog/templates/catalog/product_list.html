@@ -4,27 +4,32 @@
 {% include 'catalog/includes/inc_catalog_title.html' %}
 {% include 'catalog/includes/inc_button_create_product.html' %}
 
-     <div class="row text-center">
-        {% for object in object_list %}
-        <div class="col-md-4 mb-4">
-            <div class="card rounded-3 shadow-sm">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">{{ object.name }}</h4>
-                </div>
-                <div class="card-body">
-                    <p>{{ object.description|truncatechars:100 }}</p>
-                    <h5 class="card-title pricing-card-title">{{ object.price|floatformat:0 }} руб.</h5>
-                </div>
-                <div class="card-footer">
-                    <div class="btn-group">
-                        <a href="{% url 'catalog:product_detail' pk=object.pk %}" type="button" class="btn btn-primary">View</a>
-                        <a href="{% url 'catalog:product_update' pk=object.pk %}" type="button" class="btn btn-primary">Edit</a>
-                        <a href="{% url 'catalog:product_delete' pk=object.pk %}" type="button" class="btn btn-danger">Delete</a>
-                    </div>
+<div class="row text-center">
+    {% for object in object_list %}
+    {% if object.current_version %}
+    <div class="col-md-4 mb-4">
+        <div class="card rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ object.name }}</h4>
+            </div>
+            <div class="card-body">
+                <p>{{ object.description|truncatechars:100 }}</p>
+                <h5 class="card-title pricing-card-title">{{ object.price|floatformat:0 }} руб.</h5>
+                <p>Активная версия: {% if object.current_version %}{{ object.current_version.version_number }}{% else %}Нет активной версии{% endif %}</p>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="{% url 'catalog:product_detail' pk=object.pk %}" type="button"
+                       class="btn btn-primary">View</a>
+                    <a href="{% url 'catalog:product_update' pk=object.pk %}" type="button"
+                       class="btn btn-primary">Edit</a>
+                    <a href="{% url 'catalog:product_delete' pk=object.pk %}" type="button" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endif %}
+    {% endfor %}
+</div>
 
 {% endblock %}
