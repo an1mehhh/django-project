@@ -1,0 +1,48 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+{% include 'blog/includes/inc_button_create_blog.html' %}
+
+<div class="row">
+
+    {% for post in object_list %}
+
+    <div class="col-md-6 mt-4">
+        <article class="border rounded overflow-hidden shadow-sm h-md-250 position-relative">
+            <div class="row">
+                <div class="col-md-8 p-4 d-flex flex-column">
+                    <h3>{{ post.title }}</h3>
+                    <time class="text-muted">{{ post.created_at }}</time>
+                    <div class="flex-grow-1">
+                        <p class="text-wrap">{{ post.content|truncatechars:40 }}</p>
+                    </div>
+                    <a href="{% url 'blog:blog_detail' pk=post.pk slug=post.slug %}"
+                       class="stretched-link mt-auto"
+                    >Продолжить чтение</a>
+                    <!-- Счетчик просмотров для первого поста -->
+                    <div class="view-counter d-flex">
+                        <div class="img_view">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                 viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                        </div>
+                        <span class="ms-2">{{ post.view_count }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <img src="{% mediapath post.preview_image %}" alt="Описание изображения" class="bd-placeholder-img"
+                         width="100%"
+                         height="250">
+                </div>
+            </div>
+        </article>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endblock %}
