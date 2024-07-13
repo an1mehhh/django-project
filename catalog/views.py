@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -10,10 +11,15 @@ from catalog.models import Product, Version
 
 # Create your views here.
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = CombinedProductVersionForm
     success_url = reverse_lazy('catalog:product_list')
+
+    def form_valid(self, form):
+        """Привязка пользователя к продукту"""
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class ProductListView(ListView):
@@ -28,7 +34,7 @@ class ProductListView(ListView):
         return context
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = CombinedProductVersionForm
     success_url = reverse_lazy('catalog:product_list')
@@ -38,7 +44,7 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 

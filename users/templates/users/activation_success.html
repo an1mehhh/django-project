@@ -1,0 +1,19 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+<div class="col-12">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="cart-title">Активация почты</h3>
+                </div>
+                <div class="card-body">
+                    <p>Ваша почта успешно активирована!</p>
+                    <a href="{% url 'users:login' %}" class="btn btn-success">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
