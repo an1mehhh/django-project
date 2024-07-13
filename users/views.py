@@ -1,14 +1,13 @@
 import random
 import string
 
-from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, DetailView
 
 from config import settings
 from users.forms import UserRegisterForm, UserProfileForm, CustomPasswordResetForm
@@ -41,9 +40,19 @@ class RegisterView(CreateView):
         return super().form_valid(form)
 
 
-class ProfileView(UpdateView):
+class ProfileView(DetailView):
+    model = User
+    template_name = 'users/profile_detail.html'
+    success_url = reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class ProfileUpdateView(UpdateView):
     model = User
     form_class = UserProfileForm
+    template_name = 'users/profile_update.html'
     success_url = reverse_lazy('users:profile')
 
     def get_object(self, queryset=None):
