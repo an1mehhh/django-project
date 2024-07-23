@@ -1,0 +1,31 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+
+<div class="row ">
+    <div class="col-1">
+        <a href="{% url 'users:profile' %}">Назад</a>
+    </div>
+    <div class="card col-10">
+        <div class="card-header">
+            <h3 class="cart-title">Список клиентов</h3>
+        </div>
+        <div class="card-body">
+            {% for client in clients %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">{{ client.full_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Почта: {{ client.email }}</p>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-info" href="{% url 'client:client-detail' pk=client.pk %}">Посмотреть</a>
+                    <a class="btn btn-danger" href="{% url 'client:client-delete' pk=client.pk %}">Удалить</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

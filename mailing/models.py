@@ -1,0 +1,38 @@
+from django.db import models
+
+# Create your models here.
+NULLABLE = {'blank': True, 'null': True}
+
+
+class Mailing(models.Model):
+    STATUS_CHOICES = [
+        ('created', 'Создана'),
+        ('started', 'Запущена'),
+        ('completed', 'Завершена'),
+    ]
+
+    PERIODICITY_CHOICES = [
+        ('daily', 'Раз в день'),
+        ('weekly', 'Раз в неделю'),
+        ('monthly', 'Раз в месяц'),
+    ]
+
+    start_time = models.DateTimeField(verbose_name='Время начала рассылки')
+    end_time = models.DateTimeField(verbose_name='Время окончания рассылки')
+    periodicity = models.CharField(max_length=10, verbose_name='Периодичность рассылки', choices=PERIODICITY_CHOICES)
+    status = models.CharField(max_length=10, verbose_name='Статус рассылки', choices=STATUS_CHOICES, default='created')
+    recipients = models.TextField(verbose_name='Список получателей',
+                                  help_text='Введите адреса электронной почты через запятую', default='')
+
+    def __str__(self):
+        return f"Mailing {self.id} - {self.status}"
+
+
+class Log(models.Model):
+    mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE)
+    attempt_time = models.DateTimeField(verbose_name='Дата и время последней отправки', auto_now=True)
+    status = models.CharField(verbose_name='Статус', max_length=50)
+    server_response = models.TextField(verbose_name='Ответ сервера', **NULLABLE)
+
+    def str(self):
+        return f"Log {self.id} - {self.status}"

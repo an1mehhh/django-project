@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,6 +42,12 @@ INSTALLED_APPS = [
     'catalog',
     'blog',
     'users',
+    'client',
+    'mailing',
+    'message',
+    'log',
+
+
 ]
 
 MIDDLEWARE = [
@@ -139,13 +146,12 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# SMTP почтового сервера
-
+# SMTP РїРѕС‡С‚РѕРІРѕРіРѕ СЃРµСЂРІРµСЂР°
+DEFAULT_FROM_EMAIL = "an1mehhh@yandex.ru"
+SERVER_EMAIL = "an1mehhh@yandex.ru"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "an1mehhh@yandex.ru"
 EMAIL_HOST_PASSWORD = "qzgtfqgjgvpzeyup"
 EMAIL_USE_SSL = True
-

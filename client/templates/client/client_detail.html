@@ -1,0 +1,21 @@
+{% extends 'catalog/base.html' %}
+{% block content  %}
+<div class="row text-center">
+    <div class="col-1">
+        <a href="{% url 'client:client-list' %}">Назад</a>
+    </div>
+    <div class="col-10">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ client.full_name }}</h4>
+            </div>
+            <div class="card-body">
+                <p>Почта: {{ client.email }}</p>
+                <p> Описание: <b>{{ client.comment }} </b></p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}

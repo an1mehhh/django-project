@@ -1,0 +1,24 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+
+<div class="row ">
+    <div class="col-1">
+        <a href="#">Назад</a>
+    </div>
+    <div class="card col-10">
+        <div class="card-header">
+            <h3 class="cart-title">Список рассылок</h3>
+        </div>
+        <div class="card-body">
+            {% for mailing in mailings %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <a href="{% url 'mailing:mailing_edit' pk=mailing.pk %}">{{ mailing.start_time }} - {{ mailing.end_time }}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
