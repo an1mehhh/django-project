@@ -1,5 +1,6 @@
 from django.db import models
 
+from mailing.models import Mailing
 from message.models import Message
 
 NULLABLE = {'blank': True, 'null': True}
@@ -8,6 +9,7 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class Log(models.Model):
+    mailing = models.ForeignKey(Mailing, verbose_name='Рассылка', on_delete=models.CASCADE, **NULLABLE)
     message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE)
     attempt_time = models.DateTimeField(verbose_name='Дата и время последней отправки', auto_now=True)
     status = models.CharField(verbose_name='Статус', max_length=50)

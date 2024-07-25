@@ -13,7 +13,7 @@
             {% for mailing in mailings %}
             <div class="card mb-4">
                 <div class="card-body">
-                    <a href="{% url 'mailing:mailing_edit' pk=mailing.pk %}">{{ mailing.start_time }} - {{ mailing.end_time }}</a>
+                    <a href="{% url 'mailing:mailing_detail' pk=mailing.pk %}">{{ mailing.start_time }} - {{ mailing.end_time }}</a>
                 </div>
             </div>
             {% endfor %}

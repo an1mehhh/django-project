@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from django.views.generic import CreateView
+
+from log.models import Log
+
 
 # Create your views here.

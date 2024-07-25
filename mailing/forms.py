@@ -7,9 +7,11 @@ from message.models import Message
 class MailingForm(forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = ['start_time', 'end_time', 'periodicity', 'status', 'recipients']
+        fields = ['start_time', 'end_time', 'periodicity', 'recipients']
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'end_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
 
