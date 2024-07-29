@@ -63,6 +63,18 @@ class CombinedProductVersionForm(forms.ModelForm):
         return product
 
 
+class ProductAdminForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'image', 'category', 'price', 'is_published',)
+
+
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_published',)
+
+
 class ContactForm(forms.Form):
     name = forms.CharField(label='Имя', max_length=100)
     phone = forms.CharField(label='Телефон', max_length=20)

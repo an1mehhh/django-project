@@ -25,7 +25,10 @@ class RegisterView(CreateView):
         verification = gen_verification_code_or_password()
         new_user.email_verification = verification
         new_user.is_active = False
-        new_user.save(update_fields=['email_verification', 'is_active'])
+        if new_user.email_verification != verification or new_user.is_active != False:
+            new_user.save(update_fields=['email_verification', 'is_active'])
+        else:
+            new_user.save()
 
         verification_url = f'http://127.0.0.1:8000/users/activate/{verification}'
 

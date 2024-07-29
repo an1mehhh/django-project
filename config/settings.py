@@ -155,3 +155,5 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = "an1mehhh@yandex.ru"
 EMAIL_HOST_PASSWORD = "qzgtfqgjgvpzeyup"
 EMAIL_USE_SSL = True
+
+LOGIN_URL = '/users/'

@@ -1,11 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.forms import inlineformset_factory
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from catalog.forms import CombinedProductVersionForm, ContactForm
+from catalog.forms import CombinedProductVersionForm, ContactForm, ProductModeratorForm, ProductAdminForm
 from catalog.models import Product, Version
 
 
@@ -22,7 +24,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
     def get_context_data(self, **kwargs):
@@ -33,14 +35,41 @@ class ProductListView(ListView):
             product.current_version = current_version
         return context
 
+    def get_queryset(self):
+        return Product.objects.filter(is_published=True)
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
     model = Product
     form_class = CombinedProductVersionForm
+    permission_required = 'catalog.change_product'
     success_url = reverse_lazy('catalog:product_list')
 
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            product = form.save(commit=False)  # Сохраняем форму без коммита
+            user = self.request.user
+            product.owner = user
+            product.save()  # Сохраняем продукт с установленным владельцем
+            formset.instance = product
+            formset.save()  # Сохраняем формсет
+            return super().form_valid(form)
+        else:
+            return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
-class ProductDetailView(DetailView):
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return CombinedProductVersionForm
+        elif user.has_perms(["catalog.cancel_publication", "catalog.can_edit_description", "catalog.can_edit_category",]):
+            return ProductModeratorForm
+        else:
+            raise PermissionDenied
+
+
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
 
 
