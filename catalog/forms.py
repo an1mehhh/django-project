@@ -63,11 +63,6 @@ class CombinedProductVersionForm(forms.ModelForm):
         return product
 
 
-class ProductAdminForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ('name', 'description', 'image', 'category', 'price', 'is_published',)
-
 
 class ProductModeratorForm(forms.ModelForm):
     class Meta:
