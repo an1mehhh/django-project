@@ -7,10 +7,37 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from catalog.forms import CombinedProductVersionForm, ContactForm, ProductModeratorForm
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
+from catalog.services import get_cached_categories, get_cached_products
 
 
 # Create your views here.
+
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    template_name = 'catalog/category_list.html'
+    context_object_name = 'categories'
+
+    def get_queryset(self):
+        return get_cached_categories()
+
+
+class ProductListView(LoginRequiredMixin, ListView):
+    model = Product
+    template_name = 'catalog/product_list.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        return get_cached_products()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for product in context['products']:
+            product_versions = Version.objects.filter(product=product)
+            current_version = product_versions.filter(is_current_version=True).first()
+            product.current_version = current_version
+        return context
+
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
@@ -21,21 +48,6 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         """Привязка пользователя к продукту"""
         form.instance.owner = self.request.user
         return super().form_valid(form)
-
-
-class ProductListView(LoginRequiredMixin, ListView):
-    model = Product
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        for product in context['object_list']:
-            product_versions = Version.objects.filter(product=product)
-            current_version = product_versions.filter(is_current_version=True).first()
-            product.current_version = current_version
-        return context
-
-    def get_queryset(self):
-        return Product.objects.filter(is_published=True)
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin):
@@ -62,7 +74,8 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView, PermissionRequiredMixin)
         user = self.request.user
         if user == self.object.owner:
             return CombinedProductVersionForm
-        elif user.has_perms(["catalog.cancel_publication", "catalog.can_edit_description", "catalog.can_edit_category",]):
+        elif user.has_perms(
+                ["catalog.cancel_publication", "catalog.can_edit_description", "catalog.can_edit_category", ]):
             return ProductModeratorForm
         else:
             raise PermissionDenied

@@ -1,0 +1,16 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+{% include 'catalog/includes/inc_catalog_title.html' %}
+
+
+<div>
+    <h1>Категории</h1>
+    <ul>
+        {% for category in categories %}
+        <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
