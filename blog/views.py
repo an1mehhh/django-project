@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from pytils.translit import slugify
@@ -20,10 +21,10 @@ class BlogCreateView(CreateView):
         return super().form_valid(form)
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     model = Blog
 
-    # отображение публикаций is_published=True
+    # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ is_published=True
     def get_queryset(self, *args, **kwargs):
         queryset = super().get_queryset(*args, **kwargs)
         queryset = queryset.filter(is_published=True)
@@ -39,7 +40,7 @@ class BlogUpdateView(UpdateView):
 class BlogDetailView(DetailView):
     model = Blog
 
-    # просмотры
+    # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
         self.object.view_count += 1

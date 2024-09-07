@@ -14,13 +14,3 @@ class Message(models.Model):
 
     def __str__(self):
         return self.subject
-
-
-class Log(models.Model):
-    message = models.ForeignKey(Message, verbose_name='Сообщение', on_delete=models.CASCADE, related_name='logs')
-    attempt_time = models.DateTimeField(verbose_name='Дата и время последней отправки', auto_now=True)
-    status = models.CharField(verbose_name='Статус', max_length=50)
-    server_response = models.TextField(verbose_name='Ответ сервера', **NULLABLE)
-
-    def str(self):
-        return f"Log {self.id} - {self.status}"

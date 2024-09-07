@@ -3,7 +3,7 @@
 
 <div class="row ">
     <div class="col-1">
-        <a href="#">Назад</a>
+        <a href="{% url 'mailing:mailing_list' %}">Назад</a>
     </div>
     <div class="card col-10">
         <div class="card-header">
@@ -12,11 +12,10 @@
         <div class="card-body">
             <div class="card mb-4">
                 <div class="card-body">
-                    {{ mailing.start_time }}
-                    {{ mailing.end_time }}
-                    {{ mailing.periodicity }}
-                    {{ mailing.status }}
-                    {{ mailing.recipients }}
+                    Время рассылки: {{ mailing.start_time|date:"d.m.Y, g:i a" }} - {{ mailing.end_time|date:"d.m.Y, g:i a" }}<br>
+                    Периодичность: {{ mailing.get_periodicity_display }}<br>
+                    Статус: {{ mailing.get_status_display }}<br>
+                    Получатели: {{ mailing.recipients }}<br>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 
 <div class="row ">
     <div class="col-1">
-        <a href="#">Назад</a>
+        <a href="{% url 'users:profile' %}">Назад</a>
     </div>
     <div class="card col-10">
         <div class="card-header">
@@ -13,7 +13,11 @@
             {% for message in messages %}
             <div class="card mb-4">
                 <div class="card-body">
-                    <a href="{% url 'message:message_edit' pk=message.pk %}">{{ message.subject }} - {{ message.mailing }}</a>
+                    <p href="{% url 'message:message_edit' pk=message.pk %}">Тема:{{ message.subject }}<br> Рассылка:{{ message.mailing }}</p>
+                </div>
+                <div class="card-footer mb-6">
+                    <a class="btn btn-info" href="{% url 'message:message_edit' pk=message.pk %}">Посмотреть</a>
+                    <a class="btn btn-danger" href="{% url 'message:message_delete' pk=message.pk %}">Удалить</a>
                 </div>
             </div>
             {% endfor %}

@@ -1,8 +1,12 @@
 {% extends 'catalog/base.html' %}
 {% load my_tags %}
 {% block content %}
+
 <div class="col-12">
     <div class="row">
+        <div class="col-1">
+            <a href="{% url 'blog:blog_list' %}">Назад</a>
+        </div>
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
@@ -10,9 +14,9 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                         {% if object %}
-                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                         {% else %}
-                            <button type="submit" class="btn btn-primary">Создать</button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
                         {% endif %}
                     </form>
                 </div>

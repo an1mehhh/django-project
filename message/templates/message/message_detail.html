@@ -3,7 +3,7 @@
 
 <div class="row ">
     <div class="col-1">
-        <a href="#">Назад</a>
+        <a href="{% url 'message:message-list' %}">Назад</a>
     </div>
     <div class="card col-10">
         <div class="card-header">
@@ -12,9 +12,9 @@
         <div class="card-body">
             <div class="card mb-4">
                 <div class="card-body">
-                    {{ message.mailing }}
-                    {{ message.subject }}
-                    {{ message.body }}
+                    Рассылка:{{ message.mailing }}<br>
+                    Тема:{{ message.subject }}<br>
+                    Сообщение:{{ message.body }}<br>
                 </div>
             </div>
         </div>

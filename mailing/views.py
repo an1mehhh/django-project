@@ -1,7 +1,8 @@
 import socket
 
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView
 
 from log.models import Log
 from mailing.forms import MailingForm
@@ -34,13 +35,14 @@ class MailingCreateView(CreateView):
         self.object.save()
 
         # Устанавливаем значение поля message_id в модели Log
-        log = Log(mailing=self.object, message=Message.objects.get(id=self.object.message_id), server_response=self.get_context_data())
+        log = Log(mailing=self.object, message=Message.objects.get(id=self.object.message_id),
+                  server_response=self.get_context_data())
         log.message_id = self.object.message_id
         log.server_response = self.response
         log.status = self.object.status
         log.save()
 
-        return response
+        return redirect('message:create-message')
 
     def get_default_message_id(self):
         # Логика для получения значения message_id по умолчанию
@@ -66,4 +68,9 @@ class MailingListView(ListView):
 class MailingDetailView(DetailView):
     model = Mailing
     form_class = MailingForm
+    success_url = reverse_lazy('mailing:mailing_list')
+
+
+class MailingDeleteView(DeleteView):
+    model = Mailing
     success_url = reverse_lazy('mailing:mailing_list')

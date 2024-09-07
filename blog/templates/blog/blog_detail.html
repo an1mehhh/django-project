@@ -3,16 +3,27 @@
 {% block content %}
 
 <div class="col-md-12">
-    <article class="blog-post">
-        <h2 class="display-5 link-body-emphasis mb-1">{{ object.title }}</h2>
-        <p class="blog-post-meta">{{ object.created_at }}</p>
-        <hr>
-        <p>{{ object.content }}</p>
-    </article>
-    <nav class="blog-pagination" aria-label="Pagination">
-        <a class="btn btn-outline-primary rounded-pill" href="{% url 'blog:blog_update' object.pk object.slug %}">Edit</a>
-        <a class="btn btn-outline-danger rounded-pill" href="{% url 'blog:blog_delete' object.pk object.slug %}">Delete</a>
-    </nav>
+
+    <div class="row">
+        <div class="col-1">
+            <a href="{% url 'blog:blog_list' %}">Назад</a>
+        </div>
+        <div class="col-11 card">
+            <article class="blog-post">
+                <h2 class="display-5 link-body-emphasis mb-1">{{ object.title }}</h2>
+                <p class="blog-post-meta">{{ object.created_at }}</p>
+                <hr>
+                <p>{{ object.content }}</p>
+            </article>
+            <nav class="blog-pagination" aria-label="Pagination">
+                <a class="btn btn-outline-primary rounded-pill"
+                   href="{% url 'blog:blog_update' object.pk object.slug %}">Edit</a>
+                <a class="btn btn-outline-danger rounded-pill"
+                   href="{% url 'blog:blog_delete' object.pk object.slug %}">Delete</a>
+            </nav>
+        </div>
+    </div>
+
 
 </div>
 
