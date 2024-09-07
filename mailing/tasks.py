@@ -9,7 +9,7 @@ from message.models import Message
 
 @shared_task
 def schedule_mailing(mailing_id):
-    mailing = Mailing.objects.get(id=mailing_id)
+    mailing = Mailing.objects.filter(id=mailing_id).first()
     message = Message.objects.get(mailing=mailing)
 
     for recipient in mailing.recipients.split(','):
